@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 450" role="img" aria-label="Illustrative synthetic warehouse environmental monitoring trends">
+<rect width="920" height="450" fill="#fff"/>
+<text x="35" y="40" font-size="25" font-weight="bold" font-family="sans-serif" fill="#142c44">Synthetic grain-storage monitoring</text>
+<text x="35" y="63" font-size="14" font-family="sans-serif" fill="#617487">Generated data · not a hardware measurement</text>
+<rect x="80" y="105" width="790" height="110" rx="7" fill="#f5f8fc" stroke="#d4e1eb"/>
+<rect x="80" y="268" width="790" height="110" rx="7" fill="#f5f8fc" stroke="#d4e1eb"/>
+<text x="85" y="99" font-size="16" fill="#2276b7" font-family="sans-serif">Temperature (°C)</text>
+<text x="85" y="261" font-size="16" fill="#158e89" font-family="sans-serif">Relative humidity (%)</text>
+<polyline points="80,194 140,191 200,184 260,183 320,119 380,126 440,184 500,191 560,188 620,172 680,176 740,186 800,192 870,187" fill="none" stroke="#2276b7" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="80,339 140,336 200,331 260,326 320,281 380,287 440,332 500,345 560,337 620,330 680,334 740,338 800,340 870,335" fill="none" stroke="#158e89" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="330" y="420" font-size="14" font-family="sans-serif" fill="#617487">Sequence of synthetic samples</text>
+</svg>

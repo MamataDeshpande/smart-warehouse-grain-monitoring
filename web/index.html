@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intelligent Grain Storage | Monitoring</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1722;--panel:#162739;--line:#32485b;--text:#eff6f7;--accent:#68d7b4}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+main{max-width:1150px;margin:auto;padding:34px 24px}
+h1{font-size:clamp(26px,4vw,38px);margin:8px 0}
+p,small{color:#b4c3d1}
+p{line-height:1.6}
+small{font-size:12px}
+header{margin-bottom:24px}
+header strong{color:var(--accent);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.notice{background:#373126;border-left:4px solid #ffc372;padding:14px;margin:18px 0;border-radius:8px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:20px;min-width:0}
+.card h2{font-size:14px;color:#b6c5d2;margin:0 0 10px}
+.metric{font-size:clamp(24px,3vw,34px);font-weight:700}
+.bottom{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;margin-top:12px}
+svg{width:100%;height:300px}
+ul{padding:0;list-style:none}
+li{padding:12px;margin:8px 0;border-radius:8px;background:#21364b;font-size:13px}
+li b{display:block;color:#7be0bc}
+@media(max-width:780px){.grid{grid-template-columns:repeat(2,1fr)}.bottom{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<strong>Raspberry Pi · IoT grain storage project</strong>
+<h1>Intelligent Grain Storage Monitoring</h1>
+<p>Environmental measurements, event detection and local warehouse monitoring.</p>
+</header>
+<div class="notice">Synthetic data only. Gas indicators are uncalibrated and alerts are not certified safety warnings.</div>
+<section class="grid">
+<div class="card"><h2>Temperature</h2><div class="metric" id="temperature">—</div><small>°C · simulated DHT</small></div>
+<div class="card"><h2>Humidity</h2><div class="metric" id="humidity">—</div><small>% · simulated DHT</small></div>
+<div class="card"><h2>MQ-2 raw</h2><div class="metric" id="mq2">—</div><small>0–1023 · uncalibrated</small></div>
+<div class="card"><h2>MQ-135 raw</h2><div class="metric" id="mq135">—</div><small>0–1023 · uncalibrated</small></div>
+</section>
+<section class="bottom">
+<div class="card"><h2>Temperature and relative humidity trends</h2>
+<svg id="chart" viewBox="0 0 700 300" aria-label="Synthetic trend chart"></svg>
+<small style="color:#68d7b4">— Temperature</small> · <small style="color:#ffc372">— Humidity</small>
+</div>
+<div class="card"><h2>Monitoring events</h2><ul id="alerts"></ul></div>
+</section>
+<p id="status">Reading the local SQLite database…</p>
+<script>
+const get = id => document.getElementById(id);
+const NS="http://www.w3.org/2000/svg";
+function pathSeries(points,field,min,max){
+return points.map((p,i)=>{
+  const x=36+i*640/Math.max(1,points.length-1);
+  const y=255-220*(Math.max(min,Math.min(max,Number(p[field])))-min)/(max-min);
+  return (i===0?"M":"L")+x.toFixed(1)+" "+y.toFixed(1);
+}).join(" ");
+}
+function draw(readings){
+  const chart=get("chart");chart.replaceChildren();
+  for(let i=0;i<=4;i++){
+    const line=document.createElementNS(NS,"line");
+    for(const [k,v] of Object.entries({x1:36,x2:676,y1:35+i*55,y2:35+i*55,stroke:"#33516b"}))line.setAttribute(k,String(v));
+    chart.append(line);
+  }
+  for(const item of [
+    ["temperature_c",0,50,"#68d7b4"],
+    ["humidity_pct",0,100,"#ffc372"]
+  ]){
+    const curve=document.createElementNS(NS,"path");
+    curve.setAttribute("d",pathSeries(readings,item[0],item[1],item[2]));
+    curve.setAttribute("fill","none");curve.setAttribute("stroke",item[3]);
+    curve.setAttribute("stroke-width","2.7");chart.append(curve);
+  }
+}
+async function refresh(){
+try{
+const [r,a]=await Promise.all([fetch("/api/readings"),fetch("/api/alerts")]);
+if(!r.ok||!a.ok)throw Error("API error");
+const readings=await r.json(),alerts=await a.json();
+if(readings.length){
+const v=readings[readings.length-1];
+get("temperature").textContent=Number(v.temperature_c).toFixed(1)+" °C";
+get("humidity").textContent=Number(v.humidity_pct).toFixed(1)+" %";
+get("mq2").textContent=v.mq2_raw;get("mq135").textContent=v.mq135_raw;
+draw(readings);
+}
+const target=get("alerts");target.replaceChildren();
+for(const entry of alerts.slice(-8).reverse()){
+const li=document.createElement("li"),label=document.createElement("b"),body=document.createElement("span");
+label.textContent=entry.level+" · "+entry.kind.replaceAll("_"," ");
+body.textContent=entry.message;li.append(label,body);target.append(li);
+}
+if(!alerts.length){const li=document.createElement("li");li.textContent="No synthetic alerts.";target.append(li);}
+get("status").textContent=readings.length+" synthetic readings · "+alerts.length+" advisories · local-only dashboard";
+}catch(e){get("status").textContent="Run: python -m grain_monitor simulate, then refresh.";}
+}
+refresh();setInterval(refresh,10000);
+</script>
+</main>
+</body>
+</html>

@@ -1,0 +1,7 @@
+[
+  {"id":1,"time_iso":"2026-01-01T08:26:00+00:00","kind":"warm","level":"Advisory","message":"Elevated temperature in simulated warehouse"},
+  {"id":2,"time_iso":"2026-01-01T08:26:00+00:00","kind":"humid","level":"Advisory","message":"Elevated relative humidity in simulated warehouse"},
+  {"id":3,"time_iso":"2026-01-01T09:02:00+00:00","kind":"smoke","level":"Warning","message":"Elevated mock MQ-2 signal; NOT a fire alarm"},
+  {"id":4,"time_iso":"2026-01-01T09:02:00+00:00","kind":"air_quality","level":"Advisory","message":"Elevated mock MQ-135 signal; not calibrated gas concentration"},
+  {"id":5,"time_iso":"2026-01-01T09:38:00+00:00","kind":"motion","level":"Notice","message":"Motion indicated by synthetic IR sensor"}
+]
