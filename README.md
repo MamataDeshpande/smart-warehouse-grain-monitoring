@@ -2,7 +2,7 @@
 
 A Raspberry Pi and IoT project for monitoring environmental conditions inside grain warehouses. It follows my academic project report, which described a Raspberry Pi 3 connected to temperature, humidity, smoke/gas and movement sensors, with ThingSpeak monitoring and alerts for the warehouse operator.
 
-The original project addressed a practical storage problem: unfavorable temperature, humidity, smoke and unauthorized movement can go unnoticed when a warehouse is inspected only manually.
+A practical storage problem: unfavorable temperature, humidity, smoke and unauthorized movement can go unnoticed when a warehouse is inspected only manually.
 
 ## Project design
 
@@ -39,9 +39,9 @@ This repository includes an updated Python **simulation** of the project and an 
 - ThingSpeak field formatting and optional upload to a channel you control;
 - automated tests and sample charts.
 
-The browser dashboard and local SQLite database are additions to this portfolio version. The report proposed desktop and Android monitoring; **a native Android app, live GSM alerts and automatic warehouse controls are not implemented here**. The Raspberry Pi example has not been tested on physical hardware.
 
-### Quick start — no hardware required
+
+### Quick start 
 
 Python 3.10 or newer:
 
@@ -74,7 +74,6 @@ Uploading is optional and requires your **own** ThingSpeak channel and an explic
 python -m grain_monitor publish --send
 ```
 
-Do not commit actual API keys. The historical report included a ThingSpeak key, which is intentionally omitted here; revoke or replace that key if it remains active. The upload code has no end-to-end cloud validation in this environment.
 
 ### Raspberry Pi hardware example
 
@@ -83,8 +82,6 @@ See [hardware/README.md](hardware/README.md) for a sample DHT11, MQ-2, MQ-135 an
 ### Example monitoring output
 
 ![Example sensor trends](assets/synthetic_monitoring.svg)
-
-These plots come from generated measurements; they are **not** readings taken during the original university project. MQ gas values are uncalibrated raw signal indices, not verified CO₂ concentrations or certified fire alerts. All alert thresholds are illustrative.
 
 ## Project files
 
@@ -100,6 +97,6 @@ docs/                    Project background and hardware limitations
 
 ## Project background
 
-The design and component choices are based on my **Intelligent Grain Storage Management System** academic report. This repository keeps the same monitoring concept while updating the programming examples to current Python and adding tests. The report PDF and original API credential are not redistributed.
+The design and component choices are based on my **Intelligent Grain Storage Management System** academic report. This repository keeps the same monitoring concept while updating the programming examples to current Python and adding tests. 
 
-This is an educational monitoring project, not a certified fire alarm, a calibrated gas measurement device or a guarantee of grain safety. The source code in this repository is released under the MIT license.
+This is an educational monitoring project, not a certified fire alarm, a calibrated gas measurement device or a guarantee of grain safety. 
